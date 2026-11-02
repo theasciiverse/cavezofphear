@@ -1,0 +1,43 @@
+# System packages (.deb, .rpm, .apk, Arch) for CAVEZ of PHEAR, built by
+# nfpm from the same static binary as the av archive. The release workflow
+# sets VERSION, RELEASE (our packaging release) and ARCH (amd64 or arm64),
+# and leaves the binary at out/phear.
+#
+# The package takes Debian's name, cavezofphear; the command is upstream's,
+# phear. The binary finds its data in /usr/share/phear (its build-time
+# folder) when there is no data/ beside it. No .desktop file on purpose: av
+# is the one place titles are started from, so Asciiverse packages never
+# add menu entries (asciiverse/CLAUDE.md).
+name: cavezofphear
+arch: ${ARCH}
+platform: linux
+version: ${VERSION}
+release: ${RELEASE}
+section: games
+priority: optional
+maintainer: Asciiverse <packages@asciiverse.sh>
+vendor: Asciiverse
+homepage: https://github.com/theasciiverse/cavezofphear
+license: GPL-3.0-or-later
+description: |
+  Boulder Dash-style cave game for the terminal.
+  Dig through eleven caves collecting every diamond while stones fall and
+  roll around you, blast your way with bombs and crush the monsters. With
+  a level editor. By Tom Rune Flo, maintained by Dmitry Marakasov,
+  packaged by Asciiverse.
+contents:
+  - src: out/phear
+    dst: /usr/bin/phear
+    file_info: { mode: 0755 }
+  - src: data/
+    dst: /usr/share/phear/data
+    type: tree
+  - src: LICENSE
+    dst: /usr/share/doc/cavezofphear/copyright
+    file_info: { mode: 0644 }
+  - src: README.md
+    dst: /usr/share/doc/cavezofphear/README.md
+    file_info: { mode: 0644 }
+  - src: PATCHES.md
+    dst: /usr/share/doc/cavezofphear/PATCHES.md
+    file_info: { mode: 0644 }

@@ -1,3 +1,13 @@
+> **Play it with Asciiverse.** With [av](https://asciiverse.sh), the Asciiverse
+> client:
+>
+> ```
+> av install cavezofphear
+> av play cavezofphear
+> ```
+>
+> The original README follows.
+
 <a href="https://repology.org/project/cavezofphear/versions">
 	<img src="https://repology.org/badge/vertical-allrepos/cavezofphear.svg?exclude_unsupported=1" alt="Packaging status" align="right">
 </a>
