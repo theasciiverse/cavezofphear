@@ -26,6 +26,7 @@
 #include "misc.h"
 #include "splash.h"
 
+#include <limits.h>
 #include <ncurses.h>
 #include <string.h>
 #include <stdlib.h>
@@ -80,6 +81,8 @@ int game_main(const char* custom_map_path) {
 	}
 
 	signal(SIGINT, sigint_handler);
+	signal(SIGTERM, sigint_handler);
+	signal(SIGHUP, sigint_handler);
 	signal(SIGWINCH, sigwinch_handler);
 
 	srand(time(0));
@@ -443,7 +446,7 @@ void create_map(void) {
 		}
 	}
 
-	char mstr[1024];
+	char mstr[PATH_MAX + 64];
 	if (custom_map) {
 		snprintf(mstr, sizeof mstr, "%s", custom_map);
 	} else {

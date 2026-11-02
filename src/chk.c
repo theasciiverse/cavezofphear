@@ -17,10 +17,60 @@
 
 #include "chk.h"
 
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#if defined(__APPLE__)
+#include <mach-o/dyld.h>
+#endif
+
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
+
+// The folder holding the running binary, without a trailing slash; 0 if
+// it cannot be found. (Asciiverse: av installs a title in a folder of its
+// own, with data/ beside the binary.)
+static int exe_dir(char* buf, size_t len) {
+#if defined(__linux__)
+	ssize_t n = readlink("/proc/self/exe", buf, len - 1);
+	if (n <= 0) {
+		return 0;
+	}
+	buf[n] = '\0';
+#elif defined(__APPLE__)
+	char tmp[PATH_MAX];
+	uint32_t size = sizeof tmp;
+	if (_NSGetExecutablePath(tmp, &size) != 0 || realpath(tmp, buf) == NULL) {
+		return 0;
+	}
+	(void)len;
+#else
+	(void)buf;
+	(void)len;
+	return 0;
+#endif
+	char* slash = strrchr(buf, '/');
+	if (slash == NULL) {
+		return 0;
+	}
+	*slash = '\0';
+	return 1;
+}
 
 const char* get_data_dir(void) {
+	static char beside[PATH_MAX + 8];
+	char dir[PATH_MAX];
+
+	// data/ beside the binary first, then the one chosen at build time
+	if (exe_dir(dir, sizeof dir)) {
+		snprintf(beside, sizeof beside, "%s/data/", dir);
+		if (!chk_file(beside, "spgraf")) {
+			return beside;
+		}
+	}
 	if (!chk_file(DATADIR "/data/", "spgraf")) {
 		return DATADIR "/data/";
 	}
@@ -60,7 +110,7 @@ void chk_all(void) {
 }
 
 int chk_file(const char* dir, const char* filename) {
-	char fname[1024];
+	char fname[PATH_MAX + 64];
 
 	snprintf(fname, sizeof fname, "%s/%s", dir, filename);
 

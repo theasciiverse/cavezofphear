@@ -60,9 +60,11 @@ void bail(const char* message) {
 	exit(EXIT_FAILURE);
 }
 
+// Ctrl+C, SIGTERM and SIGHUP leave like q: the terminal put back, status 0
+// (Asciiverse; Ctrl+C used to exit with status 1 and an error message).
 void sigint_handler(int) {
 	curses_stop();
-	bail("got SIGINT, cleaning up");
+	exit(EXIT_SUCCESS);
 }
 
 void sigwinch_handler(int) {

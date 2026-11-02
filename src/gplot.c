@@ -19,11 +19,12 @@
 
 #include "chk.h"
 
+#include <limits.h>
 #include <stdio.h>
 #include <ncurses.h>
 
 int gplot(const char* filename, int x_offset, int y_offset, int ign_space) {
-	char fname[1024];
+	char fname[PATH_MAX + 64];
 	snprintf(fname, sizeof fname, "%s%s", get_data_dir(), filename);
 
 	int x = x_offset;

@@ -53,6 +53,8 @@ int editor_main(const char* file) {
 	}
 
 	signal(SIGINT, sigint_handler);
+	signal(SIGTERM, sigint_handler);
+	signal(SIGHUP, sigint_handler);
 	signal(SIGWINCH, sigwinch_handler);
 
 	for (int x = 0; x < MAP_XSIZE; x++) {
