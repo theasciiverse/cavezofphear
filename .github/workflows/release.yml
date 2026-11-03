@@ -1,3 +1,4 @@
+# Asciiverse release workflow (tag v* or run by hand with a tag)
 # Builds CAVEZ of PHEAR for the Asciiverse catalog and as system packages.
 #
 # For av: one archive per target, cavezofphear-<target>.tar.gz, holding the
